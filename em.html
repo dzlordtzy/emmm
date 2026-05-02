@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,19 +8,45 @@
     <style>
         /* Base Styles & Smooth Scroll */
         html {
-            scroll-behavior: smooth; 
+            scroll-behavior: smooth;
         }
 
         body {
             margin: 0;
             padding: 0;
-            /* Ultra-luxurious midnight blue to black gradient */
-            background: radial-gradient(circle at center, #111d33 0%, #03060f 100%); 
-            color: #fcf9f2; 
+            /* Default Base Background */
+            background-color: #03060f;
+            color: #fcf9f2;
             font-family: 'Times New Roman', Times, serif;
             overflow-x: hidden;
-            /* Smoothly transition background colors when the mood changes */
-            transition: background 2s ease-in-out; 
+        }
+
+        /* --- BACKGROUND LAYERS FOR SMOOTH MOOD TRANSITIONS --- */
+        .bg-layer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -2;
+            /* Keeps it behind everything */
+            opacity: 0;
+            transition: opacity 2s ease-in-out;
+        }
+
+        #bg-default {
+            background: radial-gradient(circle at center, #111d33 0%, #03060f 100%);
+            opacity: 1;
+            /* Shows by default */
+            z-index: -3;
+        }
+
+        #bg-happy {
+            background: radial-gradient(circle at center, #3a0d16 0%, #0a0204 100%);
+        }
+
+        #bg-sad {
+            background: radial-gradient(circle at center, #0a111c 0%, #020407 100%);
         }
 
         /* Wrap main content to easily fade it out */
@@ -39,20 +66,20 @@
             position: relative;
         }
 
-        h1 { 
-            font-size: 1.8rem; 
-            margin-bottom: 0.5rem; 
-            letter-spacing: 8px; 
-            color: #d4af37; 
+        h1 {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+            letter-spacing: 8px;
+            color: #d4af37;
             font-weight: normal;
             text-transform: uppercase;
             text-shadow: 0 0 10px rgba(212, 175, 55, 0.2);
         }
 
-        h2 { 
-            font-size: 5rem; 
-            color: #fdf5d3; 
-            margin-top: 0; 
+        h2 {
+            font-size: 5rem;
+            color: #fdf5d3;
+            margin-top: 0;
             margin-bottom: 1rem;
             font-style: italic;
             text-shadow: 0 0 30px rgba(253, 245, 211, 0.4);
@@ -60,15 +87,16 @@
             font-weight: normal;
         }
 
-        .subtitle { 
-            font-style: italic; 
-            color: #8c9bbd; 
+        .subtitle {
+            font-style: italic;
+            color: #8c9bbd;
             font-size: 1.4rem;
             letter-spacing: 1.5px;
             position: relative;
         }
 
-        .subtitle::before, .subtitle::after {
+        .subtitle::before,
+        .subtitle::after {
             content: '';
             position: absolute;
             top: 50%;
@@ -77,8 +105,14 @@
             background-color: #d4af37;
             opacity: 0.5;
         }
-        .subtitle::before { left: -70px; }
-        .subtitle::after { right: -70px; }
+
+        .subtitle::before {
+            left: -70px;
+        }
+
+        .subtitle::after {
+            right: -70px;
+        }
 
         /* Bouncing Scroll Link */
         .scroll-indicator {
@@ -101,9 +135,22 @@
         }
 
         @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-            40% { transform: translateY(-15px); }
-            60% { transform: translateY(-7px); }
+
+            0%,
+            20%,
+            50%,
+            80%,
+            100% {
+                transform: translateY(0);
+            }
+
+            40% {
+                transform: translateY(-15px);
+            }
+
+            60% {
+                transform: translateY(-7px);
+            }
         }
 
         /* Message Section */
@@ -132,13 +179,13 @@
         .message-box {
             background: linear-gradient(145deg, rgba(10, 15, 30, 0.9), rgba(5, 8, 15, 0.95));
             padding: 70px 60px;
-            border-radius: 2px; 
+            border-radius: 2px;
             border-top: 1px solid #d4af37;
             border-bottom: 1px solid #d4af37;
             max-width: 650px;
             width: 90%;
             text-align: center;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.8), inset 0 0 40px rgba(212, 175, 55, 0.03);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.8), inset 0 0 40px rgba(212, 175, 55, 0.03);
             margin-bottom: 80px;
             line-height: 2.2;
             font-size: 1.5rem;
@@ -170,18 +217,32 @@
         /* Pulsing Heart Animation */
         .heart {
             font-size: 3.5rem;
-            color: #c9182b; 
+            color: #c9182b;
             margin-bottom: 40px;
             animation: heartbeat 2s infinite;
             filter: drop-shadow(0 0 20px rgba(201, 24, 43, 0.5));
         }
 
         @keyframes heartbeat {
-            0% { transform: scale(1); }
-            14% { transform: scale(1.15); }
-            28% { transform: scale(1); }
-            42% { transform: scale(1.15); }
-            70% { transform: scale(1); }
+            0% {
+                transform: scale(1);
+            }
+
+            14% {
+                transform: scale(1.15);
+            }
+
+            28% {
+                transform: scale(1);
+            }
+
+            42% {
+                transform: scale(1.15);
+            }
+
+            70% {
+                transform: scale(1);
+            }
         }
 
         .buttons {
@@ -201,32 +262,34 @@
             border-radius: 1px;
             cursor: pointer;
             transition: all 0.5s ease;
+            position: relative;
+            z-index: 10;
         }
 
-        #yes-btn { 
-            background-color: #d4af37; 
-            color: #03060f; 
+        #yes-btn {
+            background-color: #d4af37;
+            color: #03060f;
             border: 1px solid #d4af37;
             font-weight: bold;
         }
 
-        #yes-btn:hover { 
-            background-color: #fdf5d3; 
+        #yes-btn:hover {
+            background-color: #fdf5d3;
             border-color: #fdf5d3;
-            transform: translateY(-4px); 
+            transform: translateY(-4px);
             box-shadow: 0 15px 25px rgba(212, 175, 55, 0.2);
         }
 
-        #no-btn { 
-            background-color: transparent; 
-            color: #d4af37; 
+        #no-btn {
+            background-color: transparent;
+            color: #d4af37;
             border: 1px solid #d4af37;
         }
 
-        #no-btn:hover { 
-            background-color: rgba(212, 175, 55, 0.05); 
+        #no-btn:hover {
+            background-color: rgba(212, 175, 55, 0.05);
             transform: translateY(-4px);
-            box-shadow: 0 15px 25px rgba(0,0,0,0.4);
+            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.4);
         }
 
         /* Warning Text before final choice */
@@ -267,7 +330,8 @@
             padding: 20px;
             box-sizing: border-box;
             z-index: 100;
-            pointer-events: none; /* Ignore clicks while fading in */
+            pointer-events: none;
+            /* Ignore clicks while fading in */
         }
 
         .fade-in {
@@ -284,7 +348,13 @@
         }
     </style>
 </head>
+
 <body>
+
+    <!-- Background Layers for flawless color fading -->
+    <div id="bg-default" class="bg-layer"></div>
+    <div id="bg-happy" class="bg-layer"></div>
+    <div id="bg-sad" class="bg-layer"></div>
 
     <!-- Main Wrapper (Hides entirely upon final answer) -->
     <div id="main-wrapper">
@@ -293,28 +363,45 @@
             <h1>A Message, Just For You</h1>
             <h2>Maricar</h2>
             <p class="subtitle">This page was made with love</p>
-            
+
             <a href="#message" class="scroll-indicator">Scroll Down &darr;</a>
         </section>
 
         <!-- Second Viewport (Message & Question) -->
         <section id="message" class="content-section">
             <div class="message-box hidden-scroll">
-                <p>bla bla bla</p>
-                <p>bla bla bla</p>
-                <p>bla bla bla</p>
-            </div>
+                <p> Hope u woke up feeling a bit more relaxed today. I just really wanna take a moment to say how
+                    incredibly proud i am of u. u pushed through all those quizzes last week and honestly, u did so
+                    great. Now that ur finally home, pls take all the time u need to just breathe and recharge. Makabawi
+                    ka sana ng tulog at makapagpahinga ka ng maayos. u worked so hard, so u totally deserve to just
+                    chill kahit saglit. </p>
 
-            <div class="question-box hidden-scroll">
-                <h3>Will you give me the chance to be yours?</h3>
-                <div class="heart">❤️</div>
-                
-                <div class="buttons" id="button-container">
-                    <button id="yes-btn">Yes</button>
-                    <button id="no-btn">No</button>
+                   <p> I also want u to know na kahit ganito lang tayo right now, i'm genuinely so happppppppy! I'm more
+                    than willing to wait for you, no matter how long it takes. I know this isn't the perfect time for us
+                    yet since we're both way too busy. ang dami nating ginagawa sobra, ur focusing on ur stuff at nag
+                    ttrabaho naman ako after class. </p>
+
+                  <p> I really hope that one day, when the right time finally comes and everything aligns for us, it'll be
+                    u and me. Maybe not today, but someday. I'm willing to bet on that someday with u. </p>
+
+                    <p>  Hindi ako magsasawang padalhan ka ng ganitong type ng message kahit sobrang pagod at busy ko. I'll
+                    never get tired of reminding u how special u are, kahit araw araw pa yan. Always take care of
+                    yourself ha? and pls know na nandito lang ako palagi for u, Cheering you on. </p>
+
+                    <p> love you em, </p> 
+
+                   <p  style="font-weight: bold;">  -lord </p>
+
+                <div class="question-box hidden-scroll">
+                    <h3>Will you give me the chance to be yours?</h3>
+                    <div class="heart">❤️</div>
+
+                    <div class="buttons" id="button-container">
+                        <button id="yes-btn">Yes</button>
+                        <button id="no-btn">No</button>
+                    </div>
+                    <p id="response-text"></p>
                 </div>
-                <p id="response-text"></p>
-            </div>
         </section>
     </div>
 
@@ -341,45 +428,47 @@
         const yesBtn = document.getElementById('yes-btn');
         const noBtn = document.getElementById('no-btn');
         const responseText = document.getElementById('response-text');
-        
+
         const mainWrapper = document.getElementById('main-wrapper');
         const finalScreen = document.getElementById('final-screen');
         const finalText = document.getElementById('final-text');
+
+        // Background Layers
+        const bgHappy = document.getElementById('bg-happy');
+        const bgSad = document.getElementById('bg-sad');
 
         let noClickCount = 0;
 
         // Function to handle the screen transition
         function triggerFinalScreen(mood, text) {
-            // 1. Fade out the main website
+            // 1. Fade out the main website content
             mainWrapper.classList.add('fade-out');
 
-            // 2. Wait for fade out, then swap elements
+            // 2. Fade in the correct background mood layer smoothly
+            if (mood === 'happy') {
+                bgHappy.style.opacity = '1';
+                finalText.style.color = '#fdf5d3';
+                finalText.style.textShadow = '0 0 30px rgba(253, 245, 211, 0.4)';
+            } else if (mood === 'sad') {
+                bgSad.style.opacity = '1';
+                finalText.style.color = '#5a698a';
+                finalText.style.textShadow = 'none';
+            }
+
+            // 3. Wait for content to fade out, then swap to final screen
             setTimeout(() => {
                 mainWrapper.classList.add('display-none');
                 finalScreen.classList.remove('display-none');
 
-                // 3. Apply the Mood Design
-                if (mood === 'happy') {
-                    // Deep romantic red for Yes
-                    document.body.style.background = 'radial-gradient(circle at center, #3a0d16 0%, #0a0204 100%)';
-                    finalText.style.color = '#fdf5d3'; // Bright champagne gold
-                    finalText.style.textShadow = '0 0 30px rgba(253, 245, 211, 0.4)';
-                } else if (mood === 'sad') {
-                    // Cold, lonely dark midnight for No
-                    document.body.style.background = 'radial-gradient(circle at center, #0a111c 0%, #020407 100%)';
-                    finalText.style.color = '#5a698a'; // Muted, sad silver
-                    finalText.style.textShadow = 'none'; // Removes glow
-                }
-
                 // Insert the text
                 finalText.innerHTML = text;
 
-                // 4. Fade in the final screen smoothly
+                // Fade in the final screen text smoothly
                 setTimeout(() => {
                     finalScreen.classList.add('fade-in');
-                }, 100); 
-                
-            }, 1000); // 1 second matches the fade-out CSS duration
+                }, 100);
+
+            }, 1000); // Wait 1 second matching the CSS opacity transition
         }
 
         // Logic for YES
@@ -390,7 +479,7 @@
         // Logic for NO
         noBtn.addEventListener('click', () => {
             noClickCount++;
-            
+
             if (noClickCount === 1) {
                 // First attempt to click NO (Warns her on the current screen)
                 responseText.textContent = "Oh, just think about it...";
@@ -401,4 +490,5 @@
         });
     </script>
 </body>
+
 </html>
